@@ -1,81 +1,119 @@
-@extends('layouts.plantilla')
+@extends('layouts.app')
 
-@section('contenido')
-<div class="container mt-5 pt-5">
-    <h1 class="text-center">Reservación de Servicios</h1>
-    <p class="text-center lead">Selecciona un vuelo y un hotel, luego confirma tu reservación</p>
-
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="text-center">Reservación de Servicios</h4>
-                    <form action="{{ route('reservarServicio') }}" method="POST">
-                        @csrf
-                        <label for="vuelo" class="form-label">Seleccionar Vuelo</label>
-                        <select id="vuelo" name="vuelo" class="form-select" required>
-                            <option selected disabled>Seleccione un vuelo</option>
-                            <option value="vuelo1" data-precio="300">Vuelo 1 - $300</option>
-                            <option value="vuelo2" data-precio="450">Vuelo 2 - $450</option>
-                        </select>
-
-                        <label for="hotel" class="form-label">Seleccionar Hotel</label>
-                        <select id="hotel" name="hotel" class="form-select" required>
-                            <option selected disabled>Seleccione un hotel</option>
-                            <option value="hotel1" data-precio="100">Hotel 1 - $100 por noche</option>
-                            <option value="hotel2" data-precio="150">Hotel 2 - $150 por noche</option>
-                        </select>
-
-                        <label for="num_noches" class="form-label">Duración de la Estancia (Noches)</label>
-                        <input type="number" id="num_noches" name="num_noches" class="form-control" min="1" required>
-
-                        <label for="num_pasajeros" class="form-label">Número de Pasajeros</label>
-                        <input type="number" id="num_pasajeros" name="num_pasajeros" class="form-control" min="1" required>
-
-                        <button type="button" class="btn btn-primary w-100 mt-3" onclick="calcularTotal()">Calcular Total</button>
-                        <p class="mt-3" id="totalPrecio">Total: $0</p>
-                        <button type="submit" class="btn btn-success w-100">Confirmar Reservación</button>
-                    </form>
-                </div>
-            </div>
+@section('content')
+<div class="container">
+    <h2 class="mb-4">Reservación de Servicios</h2>
+    
+    <!-- Sección de reservaciones -->
+    <div class="card mb-4">
+        <div class="card-header">Reservaciones Actuales</div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Servicio</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se listarían las reservaciones -->
+                    @if ($reservations->isEmpty())
+                    <p>No tienes reservaciones pendientes</p>
+                    @else
+                    <ul>
+                        @foreach ($reservations as $reservation)
+                        <li>
+                            {{$reservations->description}}-${{number_format($reservation->price,2)}}
+                        </li>
+                        @endforeach
+                    </ul>
+                    
+                    @endif
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Resumen y total -->
+    <div class="card mb-4">
+        <div class="card-header">Resumen de Pago</div>
+        <div class="card-body">
+            <h5>Total a Pagar: ${{ number_format($total, 2) }}</h5>
+            <button class="btn btn-success" id="proceed-to-payment">Proceder al Pago</button>
+        </div>
+    </div>
+    
+    <!-- Políticas de cancelación -->
+    <div class="alert alert-warning mt-4">
+        <strong>Políticas:</strong> Las reservaciones pueden ser canceladas sin penalización hasta 48 horas antes de la fecha del servicio.
+    </div>
+    
+    <!-- Reservaciones anteriores -->
+    <div class="card">
+        <div class="card-header">Mis Reservaciones</div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Servicio</th>
+                        <th>Fecha</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($pastReservations as $pastReservation)
+                        <tr>
+                            <td>{{ $pastReservation->service_type }}</td>
+                            <td>{{ $pastReservation->date }}</td>
+                            <td>${{ number_format($pastReservation->price, 2) }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="3" class="text-center">No tienes reservaciones previas.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function calcularTotal() {
-        const vueloPrecio = parseFloat(document.querySelector('#vuelo option:checked').dataset.precio || 0);
-        const hotelPrecio = parseFloat(document.querySelector('#hotel option:checked').dataset.precio || 0);
-        const numNoches = parseInt(document.getElementById('num_noches').value || 0);
-        const numPasajeros = parseInt(document.getElementById('num_pasajeros').value || 0);
-        const total = (vueloPrecio * numPasajeros) + (hotelPrecio * numNoches);
-        document.getElementById('totalPrecio').innerText = `Total: $${total}`;
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.cancel-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const reservationId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, cancelar',
+                    cancelButtonText: 'No, mantener',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(/reservations/cancel/${reservationId}, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Cancelada', 'La reservación ha sido cancelada.', 'success')
+                                    .then(() => location.reload());
+                            } else {
+                                Swal.fire('Error', data.message, 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    });
 </script>
-
-@if(session('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: '¡Reservación Exitosa!',
-            text: "{{ session('success') }}",
-            confirmButtonText: 'Aceptar'
-        });
-    </script>
-@endif
-
-@if($errors->any())
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Errores de Validación',
-            html: `<ul style="text-align: left;">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                   </ul>`,
-            confirmButtonText: 'Aceptar'
-        });
-    </script>
-@endif
 @endsection
