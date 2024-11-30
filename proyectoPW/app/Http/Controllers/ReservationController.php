@@ -1,40 +1,48 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Reservation;
 
 class ReservationController extends Controller
 {
-    public function index()
+    public function store(Request $request)
     {
+        $user = Auth::user();
         
-    // Verifica si el usuario está autenticado
-    //if (!Auth::check()) {
-        //return redirect('/login')->with('error', 'Por favor, inicia sesión para ver tus reservaciones.');
-   // }
-
-    $reservations = auth()->user()->reservations()->where('status', 'pending')->get();
-    $total = $reservations->sum('price');
-
-    return view('reservacion', compact('reservations', 'pastReservations', 'total'));
-    }
-
-
-    
-
-    public function cancel($id)
-    {
-        $reservation = auth()->user()->reservations()->find($id);
-
-        if (!$reservation || $reservation->created_at->diffInHours(now()) > 48) {
-            return response()->json(['success' => false, 'message' => 'No puedes cancelar esta reservación.']);
+        if (!$user) {
+            return redirect()->route('login')->withErrors('Debes estar autenticado para realizar una reservación.');
         }
 
-        $reservation->update(['status' => 'cancelled']);
+        $total = $request->hotel_price + $request->flight_price;
 
-        return response()->json(['success' => true, 'message' => 'Reservación cancelada.']);
+        $reservation = Reservation::create([
+            'user_id' => $user->id,
+            'hotel_name' => $request->hotel_name,
+            'check_in_date' => $request->check_in_date,
+            'check_out_date' => $request->check_out_date,
+            'hotel_price' => $request->hotel_price,
+            'flight_name' => $request->flight_name,
+            'flight_date' => $request->flight_date,
+            'flight_price' => $request->flight_price,
+            'total' => $total,
+        ]);
+
+        session(['reservations' => $reservation]);
+
+        return redirect()->route('reservations.reservacion');
     }
 
-    
+    public function reservacion()
+    {
+        return view('reservations.reservacion');
+    }
+
+    public function userReservations()
+    {
+        $userReservations = Auth::user()->reservations;
+        return view('reservations.user', compact('userReservations'));
+    }
 }

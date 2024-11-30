@@ -4,29 +4,29 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateReservationsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Relación con usuarios
-            $table->string('service_type'); // Tipo de servicio (hotel, vuelo, etc.)
-            $table->string('description'); // Descripción del servicio
-            $table->decimal('price', 8, 2); // Precio del servicio
-            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending'); // Estado
-            $table->timestamps(); // created_at y updated_at
+            $table->unsignedBigInteger('user_id');
+            $table->string('hotel_name');
+            $table->date('check_in_date');
+            $table->date('check_out_date');
+            $table->decimal('hotel_price', 8, 2);
+            $table->string('flight_name');
+            $table->date('flight_date');
+            $table->decimal('flight_price', 8, 2);
+            $table->decimal('total', 8, 2);
+            $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('reservations');
     }
-};
+}

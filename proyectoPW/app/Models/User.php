@@ -2,29 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use Notifiable;
 
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'usuario',
-        'rol', // Este campo debe estar incluido
+        'name', 'email', 'usuario', 'password', 'rol',
     ];
 
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', 'remember_token',
     ];
 
-    public function reservations(){
-        return $this->hasMany(Reservation::class);
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }

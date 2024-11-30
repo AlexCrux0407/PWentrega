@@ -6,14 +6,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
-
 class AuthController extends Controller
 {
     // Mostrar formulario de inicio de sesión
     public function login()
     {
-        return view('auth.login'); // Asegúrate de tener esta vista
+        return view('auth.login');
     }
+
     public function register()
     {
         return view('auth.registro');
@@ -27,7 +27,9 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt(['usuario' => $credentials['usuario'], 'password' => $credentials['password']], $request->filled('recordar'))) {
+            $request->session()->regenerate();
+
             $user = Auth::user();
 
             if ($user->rol === 'administrador') {
@@ -40,26 +42,24 @@ class AuthController extends Controller
         return back()->withErrors(['error' => 'Credenciales incorrectas, inténtalo nuevamente.']);
     }
 
+    // Procesar registro de usuario
     public function processRegister(Request $request)
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users',
             'usuario' => 'required|string|max:255|unique:users',
-            'contraseña' => 'required|string|min:8',
+            'contraseña' => 'required|string|min:8|confirmed',
         ]);
 
         User::create([
-            'name' => $request->nombre, 
+            'name' => $request->nombre,
             'email' => $request->email,
             'usuario' => $request->usuario,
-            'password' => Hash::make($request->contraseña), 
+            'password' => Hash::make($request->contraseña),
             'rol' => 'usuario',
         ]);
 
         return redirect()->route('login')->with('success', '¡Registro exitoso! Ahora puedes iniciar sesión.');
     }
-
-
-
 }
