@@ -88,14 +88,18 @@ class AdminController extends Controller
             'origen' => 'required|string|max:255',
             'destino' => 'required|string|max:255',
             'fecha_salida' => 'required|date',
+            'fecha_llegada' => 'required|date',
             'precio' => 'required|numeric',
+            'aerolinea' => 'required|string|max:255',
         ]);
 
         Vuelo::create([
             'origen' => $request->origen,
             'destino' => $request->destino,
             'fecha_salida' => $request->fecha_salida,
+            'fecha_llegada' => $request->fecha_llegada,
             'precio' => $request->precio,
+            'aerolinea' => $request->aerolinea, 
         ]);
 
         return back()->with('success', 'Vuelo creado con éxito');
