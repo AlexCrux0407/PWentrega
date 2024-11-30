@@ -10,12 +10,11 @@ return new class extends Migration {
      */
     public function up()
     {
-       // Schema::table('users', function (Blueprint $table) {
-          //  $table->string('usuario')->unique()->after('id');
-        //    $table->enum('rol', ['usuario', 'administrador'])->default('usuario')->after('password');
-       // });
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('usuario')->unique()->after('id'); // Agregar columna 'usuario'
+            $table->enum('rol', ['usuario', 'administrador'])->default('usuario')->after('password'); // Agregar columna 'rol'
+        });
     }
-
 
     /**
      * Reverse the migrations.
@@ -23,8 +22,8 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn(['usuario', 'rol']); // Eliminar columnas 'usuario' y 'rol'
         });
     }
-
 };
+
