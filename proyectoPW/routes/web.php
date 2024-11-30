@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ControladorTurista;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
@@ -71,3 +72,10 @@ Route::get('/admin/hoteles/{id}/edit', [AdminController::class, 'showEditHotelFo
 Route::put('/admin/hoteles/{id}', [AdminController::class, 'updateHotel'])->name('admin.updateHotel');
 Route::delete('/admin/hoteles/{id}', [AdminController::class, 'deleteHotel'])->name('admin.deleteHotel');
 
+
+//rutas reservacion de servicios
+Route::view('/reservacion','reservacion');
+Route::middleware(['auth'])->group(function () { 
+Route::post('/reservations/store', [ReservationController::class, 'store'])->name('reservations.store'); 
+Route::get('/reservations/reservacion', [ReservationController::class, 'reservacion'])->name('reservations.reservacion'); 
+Route::get('/reservations/user', [ReservationController::class, 'userReservations'])->name('reservations.user'); });
