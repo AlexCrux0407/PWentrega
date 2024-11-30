@@ -39,6 +39,9 @@
     <p>No hay reservaciones para mostrar.</p>
     @endif
 
+    <!-- Botón para ver mis reservaciones -->
+    <button onclick="location.href='{{ route('reservations.user') }}'">Mis Reservaciones</button>
+
     <!-- Cancelación de Reservaciones -->
     <button id="cancel-reservation">Cancelar Reservación</button>
 
