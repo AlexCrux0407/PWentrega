@@ -43,9 +43,7 @@ Route::get('/hoteles', function () {
     return view('hoteles');
 })->name('hoteles');
 
-Route::get('/reservacion', function () {
-    return view('reservacion');
-})->name('reservacion');
+
 
 Route::post('/reservar-servicio', [ControladorTurista::class, 'reservarServicio'])->name('reservarServicio');
 
@@ -74,8 +72,7 @@ Route::delete('/admin/hoteles/{id}', [AdminController::class, 'deleteHotel'])->n
 
 
 //rutas reservacion de servicios
-Route::view('/reservacion','reservacion');
-Route::middleware(['auth'])->group(function () { 
+Route::view('/reservacion','reservacion')->name('reservacion');;
 Route::post('/reservations/store', [ReservationController::class, 'store'])->name('reservations.store'); 
 Route::get('/reservations/reservacion', [ReservationController::class, 'reservacion'])->name('reservations.reservacion'); 
-Route::get('/reservations/user', [ReservationController::class, 'userReservations'])->name('reservations.user'); });
+Route::get('/reservations/user', [ReservationController::class, 'userReservations'])->name('reservations.user');
