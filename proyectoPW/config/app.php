@@ -69,6 +69,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | PDF and Excel Facades
+    |--------------------------------------------------------------------------
+    |
+    | These entries are the aliases for the PDF and Excel packages to be
+    | used within the application, as per your requirements.
+    |
+    */
+
+    'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
+
+    'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Locale Configuration
     |--------------------------------------------------------------------------
     |
