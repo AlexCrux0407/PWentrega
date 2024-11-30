@@ -18,6 +18,11 @@
             <input type="date" class="form-control" id="fecha_salida" name="fecha_salida" required>
         </div>
         <div class="mb-3">
+            <label for="fecha_llegada">Fecha de Llegada</label>
+            <input type="date" class="form-control" id="fecha_llegada" name="fecha_llegada" required>
+        </div>
+
+        <div class="mb-3">
             <label for="precio" class="form-label">Precio</label>
             <input type="number" class="form-control" id="precio" name="precio" required>
         </div>
