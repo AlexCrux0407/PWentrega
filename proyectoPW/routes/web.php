@@ -75,7 +75,7 @@ Route::delete('/admin/hoteles/{id}', [AdminController::class, 'deleteHotel'])->n
 
 //rutas reservacion de servicios
 Route::view('/reservacion','reservacion');
-Route::middleware(['auth'])->group(function () { 
-Route::post('/reservations/store', [ReservationController::class, 'store'])->name('reservations.store'); 
+Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create'); Route::post('/reservations/store', [ReservationController::class, 'store'])->name('reservations.store'); 
 Route::get('/reservations/reservacion', [ReservationController::class, 'reservacion'])->name('reservations.reservacion'); 
-Route::get('/reservations/user', [ReservationController::class, 'userReservations'])->name('reservations.user'); });
+Route::get('/reservations/user', [ReservationController::class, 'userReservations'])->name('reservations.user'); 
+Route::get('/reservations/cancel/{id}', [ReservationController::class, 'cancelReservation'])->name('reservations.cancel');
