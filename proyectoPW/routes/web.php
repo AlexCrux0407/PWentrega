@@ -84,7 +84,6 @@ Route::get('/reservations/cancel/{id}', [ReservationController::class, 'cancelRe
 Route::post('/admin/vuelos/ajustar-tarifas', [AdminController::class, 'ajustarTarifasVuelo'])->name('admin.ajustarTarifasVuelo');
 Route::post('/admin/hoteles/ajustar-tarifas', [AdminController::class, 'ajustarTarifasHotel'])->name('admin.ajustarTarifasHotel');
 
-
 // Reportes en PDF
 Route::get('/reportes/vuelos/pdf', [ReportController::class, 'vuelosPdf'])->name('reportes.vuelos.pdf');
 Route::get('/reportes/hoteles/pdf', [ReportController::class, 'hotelesPdf'])->name('reportes.hoteles.pdf');
@@ -92,3 +91,4 @@ Route::get('/reportes/hoteles/pdf', [ReportController::class, 'hotelesPdf'])->na
 // Reportes en Excel
 Route::get('/reportes/vuelos/excel', [ReportController::class, 'vuelosExcel'])->name('reportes.vuelos.excel');
 Route::get('/reportes/hoteles/excel', [ReportController::class, 'hotelesExcel'])->name('reportes.hoteles.excel');
+
