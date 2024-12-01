@@ -99,7 +99,7 @@ class AdminController extends Controller
             'fecha_salida' => $request->fecha_salida,
             'fecha_llegada' => $request->fecha_llegada,
             'precio' => $request->precio,
-            'aerolinea' => $request->aerolinea, 
+            'aerolinea' => $request->aerolinea,
         ]);
 
         return back()->with('success', 'Vuelo creado con éxito');
@@ -224,6 +224,29 @@ class AdminController extends Controller
         $hotel = Hotel::findOrFail($id);
         return view('admin.hoteles.edit', compact('hotel'));
     }
+    public function ajustarTarifasVuelo(Request $request)
+    {
+        $request->validate([
+            'incremento' => 'required|numeric',
+        ]);
+
+        Vuelo::query()->increment('precio', $request->incremento);
+
+        return back()->with('success', 'Se han ajustado las tarifas de los vuelos.');
+    }
+    public function ajustarTarifasHotel(Request $request)
+    {
+        $request->validate([
+            'incremento' => 'required|numeric',
+        ]);
+
+        Hotel::query()->increment('precio_por_noche', $request->incremento);
+
+        return back()->with('success', 'Se han ajustado las tarifas de los hoteles en $' . $request->incremento);
+    }
+    
+
+
 
 }
 

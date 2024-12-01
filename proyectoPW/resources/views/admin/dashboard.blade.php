@@ -29,7 +29,8 @@
                         <td>{{ $usuario->rol }}</td>
                         <td>
                             <a href="{{ route('admin.editUser', $usuario->id) }}" class="btn btn-warning">Editar</a>
-                            <form action="{{ route('admin.deleteUser', $usuario->id) }}" method="POST" style="display: inline-block">
+                            <form action="{{ route('admin.deleteUser', $usuario->id) }}" method="POST"
+                                style="display: inline-block">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
@@ -66,7 +67,8 @@
                         <td>{{ $vuelo->precio }}</td>
                         <td>
                             <a href="{{ route('admin.editVuelo', $vuelo->id) }}" class="btn btn-warning">Editar</a>
-                            <form action="{{ route('admin.deleteVuelo', $vuelo->id) }}" method="POST" style="display: inline-block">
+                            <form action="{{ route('admin.deleteVuelo', $vuelo->id) }}" method="POST"
+                                style="display: inline-block">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
@@ -101,7 +103,8 @@
                         <td>{{ $hotel->precio_por_noche }}</td>
                         <td>
                             <a href="{{ route('admin.editHotel', $hotel->id) }}" class="btn btn-warning">Editar</a>
-                            <form action="{{ route('admin.deleteHotel', $hotel->id) }}" method="POST" style="display: inline-block">
+                            <form action="{{ route('admin.deleteHotel', $hotel->id) }}" method="POST"
+                                style="display: inline-block">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
@@ -112,5 +115,36 @@
             </tbody>
         </table>
     </div>
+    <!-- vuelos tarifa -->
+    <div class="my-4">
+        <h3>Ajustar tarifas de vuelos</h3>
+        <form action="{{ route('admin.ajustarTarifasVuelo') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <label for="incremento" class="form-label">Incremento ($)</label>
+                <input type="number" class="form-control" id="incremento" name="incremento" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Ajustar Tarifas</button>
+        </form>
+    </div>
+    <!-- vuelos tarifa -->
+    <div class="my-4">
+        <h3>Ajustar tarifas de hoteles</h3>
+        <form action="{{ route('admin.ajustarTarifasHotel') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <label for="incremento" class="form-label">Incremento ($)</label>
+                <input type="number" class="form-control" id="incremento" name="incremento" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Ajustar Tarifas</button>
+        </form>
+    </div>
+    <a href="{{ route('reportes.vuelos.pdf') }}" class="btn btn-primary">Descargar Reporte de Vuelos (PDF)</a>
+    <a href="{{ route('reportes.vuelos.excel') }}" class="btn btn-success">Descargar Reporte de Vuelos (Excel)</a>
+    <a href="{{ route('reportes.hoteles.pdf') }}" class="btn btn-primary">Descargar Reporte de Hoteles (PDF)</a>
+    <a href="{{ route('reportes.hoteles.excel') }}" class="btn btn-success">Descargar Reporte de Hoteles (Excel)</a>
+
+
+
 </div>
 @endsection
