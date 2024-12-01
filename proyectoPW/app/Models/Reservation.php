@@ -11,13 +11,23 @@ class Reservation extends Model
 
     protected $fillable = [
         'user_id',
-        'hotel_name',
+        'hotel_id', 
         'check_in_date',
         'check_out_date',
         'hotel_price',
-        'flight_name',
+        'flight_id', 
         'flight_date',
         'flight_price',
         'total',
     ];
+
+    public function hotel()
+    {
+        return $this->belongsTo(Hotel::class, 'hotel_id'); // Relación con hoteles
+    }
+
+    public function vuelo()
+    {
+        return $this->belongsTo(Vuelo::class, 'flight_id'); // Relación con vuelos
+    }
 }

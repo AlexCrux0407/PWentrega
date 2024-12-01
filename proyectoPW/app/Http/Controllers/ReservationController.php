@@ -34,30 +34,31 @@ class ReservationController extends Controller
         $totalVuelo = $vuelo->precio;
         $total = $totalHotel + $totalVuelo;
 
+        // Crear la reservación con las relaciones
         $reservation = Reservation::create([
             'user_id' => $user->id,
-            'hotel_name' => $hotel->nombre,
-            'hotel_city' => $hotel->ciudad,
-            'hotel_category' => $hotel->categoria,
+            'hotel_id' => $hotel->id,
+            'flight_id' => $vuelo->id,
             'check_in_date' => $request->check_in_date,
             'check_out_date' => $request->check_out_date,
             'hotel_price' => $hotel->precio_por_noche,
-            'flight_name' => $vuelo->destino,
-            'flight_origin' => $vuelo->origen,
-            'flight_destination' => $vuelo->destino,
-            'flight_date' => $request->flight_date,
             'flight_price' => $vuelo->precio,
             'total' => $total,
             'created_at' => now()
         ]);
 
-        session(['reservations' => $reservation]);
+        // Almacenar la reservación en la sesión
+        session(['reservations' => $reservation->load('hotel', 'vuelo')->toArray()]);
 
         return redirect()->route('reservations.reservacion');
     }
 
+
     public function reservacion()
     {
+        // Depurar contenido de la sesión
+        dd(session('reservations'));
+
         $reservation = session('reservations');
 
         if (!$reservation) {
@@ -67,6 +68,7 @@ class ReservationController extends Controller
         return view('reservations.reservacion', compact('reservation'));
     }
 
+
     public function userReservations()
     {
         $userReservations = Auth::user()->reservations;
@@ -75,10 +77,11 @@ class ReservationController extends Controller
 
     public function create()
     {
-        $hoteles = Hotel::all();
-        $vuelos = Vuelo::all();
+        $hoteles = Hotel::all(); 
+        $vuelos = Vuelo::all();  
         return view('reservations.create', compact('hoteles', 'vuelos'));
     }
+    
 
     public function cancelReservation($id)
     {
