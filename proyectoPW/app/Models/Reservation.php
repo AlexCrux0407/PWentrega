@@ -11,7 +11,6 @@ class Reservation extends Model
 
     protected $fillable = [
         'user_id',
-        'hotel_name',
         'check_in_date',
         'check_out_date',
         'hotel_price',
@@ -19,5 +18,7 @@ class Reservation extends Model
         'flight_date',
         'flight_price',
         'total',
+        'created_at',
+        'updated_att'
     ];
 }
