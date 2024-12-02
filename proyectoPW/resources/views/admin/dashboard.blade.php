@@ -115,7 +115,15 @@
             </tbody>
         </table>
     </div>
-    <!-- vuelos tarifa -->
+
+    <!-- Términos y Condiciones -->
+    <div class="my-4">
+        <h2>Términos y Condiciones</h2>
+        <a href="{{ route('admin.terms.create') }}" class="btn btn-primary mb-3">Crear Términos y Condiciones</a>
+        <a href="{{ route('admin.terms.list') }}" class="btn btn-secondary mb-3">Editar Términos y Condiciones</a>
+    </div>
+
+    <!-- Tarifas de vuelos -->
     <div class="my-4">
         <h3>Ajustar tarifas de vuelos</h3>
         <form action="{{ route('admin.ajustarTarifasVuelo') }}" method="POST">
@@ -127,7 +135,8 @@
             <button type="submit" class="btn btn-primary">Ajustar Tarifas</button>
         </form>
     </div>
-    <!-- vuelos tarifa -->
+
+    <!-- Tarifas de hoteles -->
     <div class="my-4">
         <h3>Ajustar tarifas de hoteles</h3>
         <form action="{{ route('admin.ajustarTarifasHotel') }}" method="POST">
@@ -139,12 +148,11 @@
             <button type="submit" class="btn btn-primary">Ajustar Tarifas</button>
         </form>
     </div>
+
+    <!-- Reportes -->
     <a href="{{ route('reportes.vuelos.pdf') }}" class="btn btn-primary">Descargar Reporte de Vuelos (PDF)</a>
     <a href="{{ route('reportes.vuelos.excel') }}" class="btn btn-success">Descargar Reporte de Vuelos (Excel)</a>
     <a href="{{ route('reportes.hoteles.pdf') }}" class="btn btn-primary">Descargar Reporte de Hoteles (PDF)</a>
     <a href="{{ route('reportes.hoteles.excel') }}" class="btn btn-success">Descargar Reporte de Hoteles (Excel)</a>
-
-
-
 </div>
 @endsection

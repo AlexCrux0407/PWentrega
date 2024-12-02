@@ -103,3 +103,11 @@ Route::get('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('ho
 
 // Ruta para términos y condiciones
 Route::get('/terms-and-conditions', [ReservationController::class, 'showTermsAndConditions'])->name('termsAndConditions');
+// Rutas para términos y condiciones admin
+Route::get('/admin/terms', [AdminController::class, 'listTermsAndConditions'])->name('admin.terms.list');
+Route::get('/admin/terms/create', [AdminController::class, 'createTermsAndConditions'])->name('admin.terms.create');
+Route::post('/admin/terms/store', [AdminController::class, 'storeTermsAndConditions'])->name('admin.terms.store');
+Route::get('/admin/terms/{id}/edit', [AdminController::class, 'editTermsAndConditions'])->name('admin.terms.edit');
+Route::put('/admin/terms/{id}', [AdminController::class, 'updateTermsAndConditions'])->name('admin.terms.update');
+Route::delete('/admin/terms/{id}', [AdminController::class, 'deleteTermsAndConditions'])->name('admin.terms.delete');
+

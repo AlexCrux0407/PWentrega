@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Vuelo;
 use App\Models\Hotel;
-
+use App\Models\TermsAndConditions;
 class AdminController extends Controller
 {
     public function index()
@@ -244,7 +244,59 @@ class AdminController extends Controller
 
         return back()->with('success', 'Se han ajustado las tarifas de los hoteles en $' . $request->incremento);
     }
-    
+
+    // ---------------- TERMS ---------------- //
+    public function listTermsAndConditions()
+    {
+        $terms = TermsAndConditions::all();
+        return view('admin.terms.list', compact('terms'));
+    }
+
+    public function createTermsAndConditions()
+    {
+        return view('admin.terms.create');
+    }
+
+    public function storeTermsAndConditions(Request $request)
+    {
+        $request->validate([
+            'content' => 'required|string',
+        ]);
+
+        TermsAndConditions::create([
+            'content' => $request->content,
+        ]);
+
+        return redirect()->route('admin.terms.list')->with('success', 'Términos y condiciones creados con éxito.');
+    }
+
+    public function editTermsAndConditions($id)
+    {
+        $term = TermsAndConditions::findOrFail($id);
+        return view('admin.terms.edit', compact('term'));
+    }
+
+    public function updateTermsAndConditions(Request $request, $id)
+    {
+        $request->validate([
+            'content' => 'required|string',
+        ]);
+
+        $term = TermsAndConditions::findOrFail($id);
+        $term->update([
+            'content' => $request->content,
+        ]);
+
+        return redirect()->route('admin.terms.list')->with('success', 'Términos y condiciones actualizados con éxito.');
+    }
+
+    public function deleteTermsAndConditions($id)
+    {
+        $term = TermsAndConditions::findOrFail($id);
+        $term->delete();
+
+        return redirect()->route('admin.terms.list')->with('success', 'Términos y condiciones eliminados con éxito.');
+    }
 
 
 
