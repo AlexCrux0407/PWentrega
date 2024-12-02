@@ -6,12 +6,13 @@
     <p class="text-center lead">Encuentra el mejor hotel para tu estadía</p>
 
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h4 class="text-center">Buscar un hotel</h4>
                     <form action="{{ route('rutabuscarHotel') }}" method="POST">
                         @csrf
+                        <!-- Campo Ciudad -->
                         <label for="ciudad" class="form-label">Ciudad</label>
                         <select id="ciudad" name="ciudad" class="form-select" required>
                             <option selected disabled>Seleccione una ciudad</option>
@@ -22,20 +23,35 @@
                             <option value="Santiago">Santiago</option>
                         </select>
 
-                        <label for="checkin" class="form-label">Fecha de Check-in</label>
-                        <input type="date" id="checkin" name="checkin" class="form-control" required>
+                        <!-- Campo Fechas -->
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label for="checkin" class="form-label">Fecha de Check-in</label>
+                                <input type="date" id="checkin" name="checkin" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="checkout" class="form-label">Fecha de Check-out</label>
+                                <input type="date" id="checkout" name="checkout" class="form-control" required>
+                            </div>
+                        </div>
 
-                        <label for="checkout" class="form-label">Fecha de Check-out</label>
-                        <input type="date" id="checkout" name="checkout" class="form-control" required>
+                        <!-- Campo Número de Habitaciones -->
+                        <label for="habitaciones" class="form-label mt-3">Número de Habitaciones</label>
+                        <input type="number" id="habitaciones" name="habitaciones" class="form-control" min="1" required>
 
+                        <!-- Campo Número de Huéspedes -->
+                        <label for="huespedes" class="form-label mt-3">Número de Huéspedes</label>
+                        <input type="number" id="huespedes" name="huespedes" class="form-control" min="1" required>
+
+                        <!-- Botón -->
                         <button type="submit" class="btn btn-primary w-100 mt-3">Buscar Hotel</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
+
 @if(session('success_hotel'))
     <script>
         Swal.fire({
@@ -63,8 +79,4 @@
         });
     </script>
 @endif
-
 @endsection
-
-
-

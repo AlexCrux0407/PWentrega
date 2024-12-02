@@ -9,15 +9,20 @@ class HotelesController extends Controller
 {
     public function buscarHotel(Request $request)
     {
-        // Iniciamos la consulta en el modelo Hotel
-        $query = Hotel::query();
+        $request->validate([
+            'ciudad' => 'required|string|max:255', // obligatoria
+            'categoria' => 'nullable|integer|min:1|max:5', // Opcional
+            'precio' => 'nullable|integer|min:1|max:4', // Opcional
+            'distancia' => 'nullable|integer|min:1|max:4', // Opcional
+            'servicios' => 'nullable|string|max:255', // Opcional
+        ]);
 
-        // Filtramos por categoría (estrellas)
+        $query = Hotel::where('ciudad', $request->ciudad);
+
         if ($request->filled('categoria')) {
             $query->where('categoria', $request->categoria);
         }
 
-        // Filtramos por precio
         if ($request->filled('precio')) {
             if ($request->precio == 1) {
                 $query->where('precio_por_noche', '<', 100);
@@ -30,7 +35,6 @@ class HotelesController extends Controller
             }
         }
 
-        // Filtramos por distancia al centro
         if ($request->filled('distancia')) {
             if ($request->distancia == 1) {
                 $query->where('distancia', '<', 1);
@@ -43,15 +47,13 @@ class HotelesController extends Controller
             }
         }
 
-        // Filtramos por servicios (si está disponible)
         if ($request->filled('servicios')) {
             $query->where('servicios', 'LIKE', '%' . $request->servicios . '%');
         }
 
-        // Ejecutamos la consulta y obtenemos los resultados
         $hoteles = $query->get();
 
-        // Retornamos los resultados a la vista 'ResultadosHoteles'
         return view('ResultadosHoteles', compact('hoteles'));
     }
+
 }

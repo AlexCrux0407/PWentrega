@@ -3,91 +3,101 @@
 @section('contenido')
 <div class="container mt-5 pt-5">
     <h1 class="text-center">Resultados de la Búsqueda de Hoteles</h1>
+    <p class="text-center lead">Encuentra el hotel ideal para tu estadía</p>
 
-    <div class="row justify-content-center">
-        <div class="col-md-10">
+    <!-- Formulario de filtros -->
+    <form action="{{ route('rutabuscarHotel') }}" method="POST">
+        @csrf
+        <label for="ciudad" class="form-label">Ciudad <span class="text-danger">*</span></label>
+        <select id="ciudad" name="ciudad" class="form-select" required>
+            <option selected disabled>Seleccione una ciudad</option>
+            <option value="Lima">Lima</option>
+            <option value="Bogotá">Bogotá</option>
+            <option value="Ciudad de México">Ciudad de México</option>
+            <option value="Buenos Aires">Buenos Aires</option>
+            <option value="Santiago">Santiago</option>
+        </select>
+
+        <label for="categoria" class="form-label">Categoría (opcional)</label>
+        <select id="categoria" name="categoria" class="form-select">
+            <option value="">Categoría (Estrellas)</option>
+            <option value="1">1 Estrella</option>
+            <option value="2">2 Estrellas</option>
+            <option value="3">3 Estrellas</option>
+            <option value="4">4 Estrellas</option>
+            <option value="5">5 Estrellas</option>
+        </select>
+
+        <label for="precio" class="form-label">Rango de Precio (opcional)</label>
+        <select id="precio" name="precio" class="form-select">
+            <option value="">Seleccione un Rango de Precio</option>
+            <option value="1">Menos de $100</option>
+            <option value="2">$100 - $300</option>
+            <option value="3">$300 - $500</option>
+            <option value="4">Más de $500</option>
+        </select>
+
+        <label for="distancia" class="form-label">Distancia al Centro (opcional)</label>
+        <select id="distancia" name="distancia" class="form-select">
+            <option value="">Seleccione la Distancia</option>
+            <option value="1">Menos de 1 km</option>
+            <option value="2">1 - 5 km</option>
+            <option value="3">5 - 10 km</option>
+            <option value="4">Más de 10 km</option>
+        </select>
+
+        <label for="servicios" class="form-label">Servicios (opcional)</label>
+        <input type="text" id="servicios" name="servicios" class="form-control" placeholder="Ejemplo: wifi, piscina">
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">Buscar Hotel</button>
+    </form>
+
+
+    <!-- Tabla con los resultados -->
+    <div class="row mt-4">
+        <div class="col-md-12">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h4 class="text-center">Hoteles Encontrados</h4>
-
-                    <!-- Formulario de filtros -->
-                    <form method="GET" action="{{ route('hoteles') }}">
-                        <div class="row mb-4">
-                            <div class="col-md-3">
-                                <select class="form-control" name="categoria">
-                                    <option value="">Categoría (Estrellas)</option>
-                                    <option value="1">1 Estrella</option>
-                                    <option value="2">2 Estrellas</option>
-                                    <option value="3">3 Estrellas</option>
-                                    <option value="4">4 Estrellas</option>
-                                    <option value="5">5 Estrellas</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <select class="form-control" name="precio">
-                                    <option value="">Precio</option>
-                                    <option value="1">Menos de $100</option>
-                                    <option value="2">$100 - $300</option>
-                                    <option value="3">$300 - $500</option>
-                                    <option value="4">Más de $500</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <select class="form-control" name="distancia">
-                                    <option value="">Distancia al centro</option>
-                                    <option value="1">Menos de 1 km</option>
-                                    <option value="2">1 - 5 km</option>
-                                    <option value="3">5 - 10 km</option>
-                                    <option value="4">Más de 10 km</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <input type="text" class="form-control" name="servicios" placeholder="Buscar servicios">
-                            </div>
-                        </div>
-
-                        <div class="row justify-content-center">
-                            <div class="col-md-6 text-center">
-                                <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Botón de regreso -->
-                    <div class="mb-3">
-                        <a href="{{ route('hoteles') }}" class="btn btn-primary">Regresar</a>
-                    </div>
-
-                    <!-- Tabla con los resultados de los hoteles -->
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped mt-3">
                         <thead>
                             <tr>
-                                <th>Hotel</th>
-                                <th>Ciudad</th>
-                                <th>Categoría</th>
+                                <th>Nombre del Hotel</th>
+                                <th>Calificación</th>
+                                <th>Número de Estrellas</th>
                                 <th>Precio por Noche</th>
-                                <th>Disponibilidad de habitaciones</th>
-                                <th>Políticas de Cancelación</th>
+                                <th>Disponibilidad</th>
+                                <th>Fotos</th>
+                                <th>Descripción</th>
                                 <th>Comentarios</th>
+                                <th>Políticas de Cancelación</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($hoteles as $hotel)
+                            @forelse ($hoteles as $hotel)
                                 <tr>
-                                    <td>{{ $hotel->hotel }}</td>
-                                    <td>{{ $hotel->ciudad }}</td>
-                                    <td>{{ $hotel->categoria }} </td>
-                                    <td>${{ number_format($hotel->precio_por_noche, 2) }} Pesos</td>
-                                    <td>{{ $hotel->disponibilidad ? 'Disponible - 3 habitaciones' : 'No disponible' }}</td>
-                                    <td>{{ $hotel->politicas_cancelacion ?? 'Cancelación válida antes de 72 horas.' }}</td> 
-                                    <td>{{ $hotel->comentarios ?? 'Muy limpio.' }}</td> 
+                                    <td>{{ $hotel->nombre }}</td>
+                                    <td>{{ $hotel->calificacion ?? 'No disponible' }}</td>
+                                    <td>{{ $hotel->categoria }}</td>
+                                    <td>${{ number_format($hotel->precio_por_noche, 2) }} MXN</td>
+                                    <td>{{ $hotel->disponibilidad ? $hotel->disponibilidad . ' habitaciones disponibles' : 'No disponible' }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ $hotel->fotos ?? '#' }}" target="_blank">Ver Fotos</a>
+                                    </td>
+                                    <td>{{ $hotel->descripcion ?? 'No especificada' }}</td>
+                                    <td>{{ $hotel->comentarios ?? 'No hay comentarios disponibles' }}</td>
+                                    <td>{{ $hotel->politicas_cancelacion ?? 'No especificadas' }}</td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="text-center">No se encontraron hoteles para los criterios
+                                        seleccionados.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
+                    <a href="{{ route('hoteles') }}" class="btn btn-secondary w-100 mt-3">Regresar</a>
                 </div>
             </div>
         </div>
