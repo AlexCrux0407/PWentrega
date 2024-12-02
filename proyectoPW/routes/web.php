@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ControladorTurista;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\HotelesController;
+use App\Http\Controllers\VueloController;  
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
@@ -63,6 +65,8 @@ Route::post('/admin/vuelos/create', [AdminController::class, 'createVuelo'])->na
 Route::get('/admin/vuelos/{id}/edit', [AdminController::class, 'showEditVueloForm'])->name('admin.editVuelo');
 Route::put('/admin/vuelos/{id}', [AdminController::class, 'updateVuelo'])->name('admin.updateVuelo');
 Route::delete('/admin/vuelos/{id}', [AdminController::class, 'deleteVuelo'])->name('admin.deleteVuelo');
+Route::post('/buscar-vuelo', [VueloController::class, 'buscarVuelo'])->name('rutabuscarVuelo');
+Route::get('/buscar-vuelo', [VueloController::class, 'buscarVuelo'])->name('buscarVuelo');
 
 // Rutas para Hoteles
 Route::get('/admin/hoteles/create', [AdminController::class, 'showCreateHotelForm'])->name('admin.createHotel');
@@ -91,4 +95,6 @@ Route::get('/reportes/hoteles/pdf', [ReportController::class, 'hotelesPdf'])->na
 // Reportes en Excel
 Route::get('/reportes/vuelos/excel', [ReportController::class, 'vuelosExcel'])->name('reportes.vuelos.excel');
 Route::get('/reportes/hoteles/excel', [ReportController::class, 'hotelesExcel'])->name('reportes.hoteles.excel');
-
+Route::post('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('rutabuscarHotel');
+Route::get('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('buscarHotel');
+Route::get('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('hoteles.index');
