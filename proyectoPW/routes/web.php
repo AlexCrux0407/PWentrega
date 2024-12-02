@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ControladorTurista;
+use App\Http\Controllers\HotelesController;
+use App\Http\Controllers\VueloController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
@@ -63,6 +65,8 @@ Route::post('/admin/vuelos/create', [AdminController::class, 'createVuelo'])->na
 Route::get('/admin/vuelos/{id}/edit', [AdminController::class, 'showEditVueloForm'])->name('admin.editVuelo');
 Route::put('/admin/vuelos/{id}', [AdminController::class, 'updateVuelo'])->name('admin.updateVuelo');
 Route::delete('/admin/vuelos/{id}', [AdminController::class, 'deleteVuelo'])->name('admin.deleteVuelo');
+Route::post('/buscar-vuelo', [VueloController::class, 'buscarVuelo'])->name('rutabuscarVuelo');
+Route::get('/buscar-vuelo', [VueloController::class, 'buscarVuelo'])->name('buscarVuelo');
 
 // Rutas para Hoteles
 Route::get('/admin/hoteles/create', [AdminController::class, 'showCreateHotelForm'])->name('admin.createHotel');
@@ -70,4 +74,6 @@ Route::post('/admin/hoteles/create', [AdminController::class, 'createHotel'])->n
 Route::get('/admin/hoteles/{id}/edit', [AdminController::class, 'showEditHotelForm'])->name('admin.editHotel');
 Route::put('/admin/hoteles/{id}', [AdminController::class, 'updateHotel'])->name('admin.updateHotel');
 Route::delete('/admin/hoteles/{id}', [AdminController::class, 'deleteHotel'])->name('admin.deleteHotel');
-
+Route::post('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('rutabuscarHotel');
+Route::get('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('buscarHotel');
+Route::get('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('hoteles.index');
