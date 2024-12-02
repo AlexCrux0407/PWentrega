@@ -57,7 +57,7 @@ Route::post('/reservar-servicio', [ControladorTurista::class, 'reservarServicio'
 // Rutas para Usuarios
 Route::get('/admin/users/create', [AdminController::class, 'showCreateUserForm'])->name('admin.createUser');
 Route::post('/admin/users/create', [AdminController::class, 'createUser'])->name('admin.storeUser');
-Route::get('/admin/users/{id}/edit', [AdminController::class, 'showEditUserForm'])->name('admin.editUser');
+Route::get('/admin/users/{id}/edit', [AdminController::class, 'editUser'])->name('admin.editUser');
 Route::put('/admin/users/{id}', [AdminController::class, 'updateUser'])->name('admin.updateUser');
 Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
 

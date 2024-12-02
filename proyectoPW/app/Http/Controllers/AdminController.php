@@ -27,6 +27,10 @@ class AdminController extends Controller
     {
         return view('admin.users.create'); // Asegúrate de que esta vista exista.
     }
+    public function showEditUserForm()
+    {
+        return view('admin.users.edit'); // Asegúrate de que esta vista exista.
+    }
     
     public function createUser(Request $request)
     {
@@ -51,9 +55,10 @@ class AdminController extends Controller
 
     public function editUser($id)
     {
-        $user = User::findOrFail($id);
-        return view('admin.users.edit', compact('user'));
+        $usuario = User::findOrFail($id); 
+        return view('admin.users.edit', compact('usuario')); 
     }
+    
 
     public function updateUser(Request $request, $id)
     {
