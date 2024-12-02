@@ -12,6 +12,8 @@
                     <h4 class="text-center">Buscar un vuelo</h4>
                     <form action="{{ route('rutabuscarVuelo') }}" method="POST">
                         @csrf
+
+                        <!-- Campo de Origen -->
                         <label for="origen" class="form-label">Origen</label>
                         <select id="origen" name="origen" class="form-select" required>
                             <option selected disabled>Seleccione una ciudad</option>
@@ -22,6 +24,7 @@
                             <option value="Santiago">Santiago</option>
                         </select>
 
+                        <!-- Campo de Destino -->
                         <label for="destino" class="form-label">Destino</label>
                         <select id="destino" name="destino" class="form-select" required>
                             <option selected disabled>Seleccione una ciudad</option>
@@ -32,12 +35,19 @@
                             <option value="Londres">Londres</option>
                         </select>
 
+                        <!-- Fecha de Salida -->
                         <label for="fecha_salida" class="form-label">Fecha de Salida</label>
                         <input type="date" id="fecha_salida" name="fecha_salida" class="form-control" required>
 
+                        <!-- Fecha de Regreso -->
                         <label for="fecha_regreso" class="form-label">Fecha de Regreso (Opcional)</label>
                         <input type="date" id="fecha_regreso" name="fecha_regreso" class="form-control">
 
+                        <!-- Número de Pasajeros -->
+                        <label for="pasajeros" class="form-label">Número de Pasajeros</label>
+                        <input type="number" id="pasajeros" name="pasajeros" class="form-control" min="1" max="10" required>
+
+                        <!-- Botón de Búsqueda -->
                         <button type="submit" class="btn btn-primary w-100 mt-3">Buscar Vuelo</button>
                     </form>
                 </div>
@@ -46,6 +56,7 @@
     </div>
 </div>
 
+<!-- Mensajes de Éxito o Error -->
 @if(session('success_vuelo'))
     <script>
         Swal.fire({

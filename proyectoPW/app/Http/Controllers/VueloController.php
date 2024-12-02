@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Vuelo; 
+use App\Models\Vuelo;
 
 class VueloController extends Controller
 {
@@ -14,23 +14,27 @@ class VueloController extends Controller
             'origen' => 'required|string|max:255',
             'destino' => 'required|string|max:255',
             'fecha_salida' => 'required|date',
-            'fecha_llegada' => 'nullable|date|after_or_equal:fecha_salida', 
+            'fecha_regreso' => 'nullable|date|after_or_equal:fecha_salida',
+            'pasajeros' => 'required|integer|min:1',
         ]);
 
+        
         // Obtener los datos del formulario
         $origen = $request->input('origen');
         $destino = $request->input('destino');
         $fecha_salida = $request->input('fecha_salida');
-        $fecha_llegada = $request->input('fecha_llegada'); 
+        $fecha_regreso = $request->input('fecha_regreso');
+        $pasajeros = $request->input('pasajeros');
 
         // Realizar la consulta a la base de datos para obtener los vuelos
         $vuelos = Vuelo::where('origen', $origen)
-                        ->where('destino', $destino)
-                        ->whereDate('fecha_salida', $fecha_salida)
-                        ->when($fecha_llegada, function ($query) use ($fecha_llegada) {
-                            return $query->whereDate('fecha_llegada', $fecha_llegada);
-                        })
-                        ->get();
+            ->where('destino', $destino)
+            ->whereDate('fecha_salida', $fecha_salida)
+            ->when($fecha_regreso, function ($query) use ($fecha_regreso) {
+                return $query->whereDate('fecha_llegada', $fecha_regreso);
+            })
+            ->get();
+
 
         // Si no se encuentran vuelos, mostrar mensaje
         if ($vuelos->isEmpty()) {
@@ -38,6 +42,7 @@ class VueloController extends Controller
         }
 
         // Pasar los resultados a la vista 'ResultadosVuelos'
-        return view('ResultadosVuelos', compact('vuelos', 'origen', 'destino', 'fecha_salida', 'fecha_llegada'));
+        return view('ResultadosVuelos', compact('vuelos', 'origen', 'destino', 'fecha_salida', 'fecha_regreso', 'pasajeros'));
     }
+
 }

@@ -5,6 +5,16 @@
     <h1 class="text-center">Resultados de la Búsqueda de Vuelo</h1>
     <p class="text-center lead">Aquí están los resultados para tu búsqueda</p>
 
+    @php
+        $aerolineas = [
+            'Aeroméxico',
+            'LATAM',
+            'American Airlines',
+            'Iberia',
+            'United Airlines',
+        ];
+    @endphp
+
     <!-- Formulario de filtrado -->
     <form method="GET" action="{{ route('buscarVuelo') }}" class="mb-4">
         <div class="row justify-content-center">
@@ -12,11 +22,9 @@
                 <label for="aerolinea" class="form-label">Aerolínea</label>
                 <select name="aerolinea" class="form-select">
                     <option value="">Selecciona una Aerolínea</option>
-                    <option value="Aerolínea 1">Aeroméxico</option>
-                    <option value="Aerolínea 2">LATAM</option>
-                    <option value="Aerolínea 3">American Airlines</option>
-                    <option value="Aerolínea 3">Iberia</option>
-                    <option value="Aerolínea 3">United Airlines</option>
+                    @foreach($aerolineas as $aerolinea)
+                        <option value="{{ $aerolinea }}">{{ $aerolinea }}</option>
+                    @endforeach
                 </select>
             </div>
 
@@ -24,9 +32,9 @@
                 <label for="precio" class="form-label">Precio</label>
                 <select name="precio" class="form-select">
                     <option value="">Selecciona un Rango de Precio</option>
-                    <option value="1">Menos de $100</option>
-                    <option value="2">$100 - $500</option>
-                    <option value="3">Más de $500</option>
+                    <option value="low">Menos de $100</option>
+                    <option value="medium">$100 - $500</option>
+                    <option value="high">Más de $500</option>
                 </select>
             </div>
 
@@ -34,12 +42,11 @@
                 <label for="escalas" class="form-label">Escalas</label>
                 <select name="escalas" class="form-select">
                     <option value="">Selecciona una opción</option>
-                    <option value="1">Directo</option>
+                    <option value="directo">Directo</option>
                     <option value="1">1 Escala</option>
                     <option value="2">2 Escalas</option>
                 </select>
             </div>
-            
 
             <div class="col-md-3">
                 <label for="horario" class="form-label">Horario de Salida</label>
@@ -52,6 +59,7 @@
         </div>
     </form>
 
+    <!-- Resultados de la búsqueda -->
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card shadow-sm">
@@ -59,10 +67,10 @@
                     <h4 class="text-center">Vuelos Encontrados</h4>
 
                     <!-- Mostrar los datos de búsqueda -->
-                    <p><strong>Origen:</strong> {{ $origen }}</p>
-                    <p><strong>Destino:</strong> {{ $destino }}</p>
-                    <p><strong>Fecha de Salida:</strong> {{ $fecha_salida }}</p>
-                    <p><strong>Fecha de Regreso:</strong> {{ $fecha_llegada ? $fecha_llegada : 'No especificada' }}</p>
+                    <p><strong>Origen:</strong> {{ $origen ?? 'No especificado' }}</p>
+                    <p><strong>Destino:</strong> {{ $destino ?? 'No especificado' }}</p>
+                    <p><strong>Fecha de Salida:</strong> {{ $fecha_salida ?? 'No especificada' }}</p>
+                    <p><strong>Fecha de Regreso:</strong> {{ $fecha_llegada ?? 'No especificada' }}</p>
 
                     <hr>
 
@@ -75,22 +83,28 @@
                                 <th>Número de Vuelo</th>
                                 <th>Aerolínea</th>
                                 <th>Horario</th>
+                                <th>Duración</th>
                                 <th>Disponibilidad</th>
                                 <th>Precio por Pasajero</th>
                                 <th>Escalas</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($vuelos as $vuelo)
+                            @forelse ($vuelos as $vuelo)
                             <tr>
                                 <td>{{ $vuelo->numero_vuelo }}</td>
                                 <td>{{ $vuelo->aerolinea }}</td>
                                 <td>{{ $vuelo->horario }}</td>
-                                <td>{{ $vuelo->Disponibles }}</td>
+                                <td>{{ $vuelo->duracion }} horas</td>
+                                <td>{{ $vuelo->disponibilidad > 0 ? 'Disponible' : 'Sin disponibilidad' }}</td>
                                 <td>${{ number_format($vuelo->precio, 2) }} USD</td>
-                                <td>{{ $vuelo->escalas ? 'Directo' : '1' }}</td>
+                                <td>{{ $vuelo->escalas == 0 ? 'Directo' : $vuelo->escalas . ' Escalas' }}</td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center">No se encontraron vuelos para los criterios seleccionados.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
 

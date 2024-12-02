@@ -19,6 +19,8 @@ class Vuelo extends Model
         'precio',
         'aerolinea',
         'escalas',
+        'disponibilidad',
+        'duracion', 
     ];
 
     public $timestamps = true;
