@@ -52,4 +52,5 @@
             confirmButtonText: 'Aceptar'
         });
     </script>
+    @endif
 @endsection
