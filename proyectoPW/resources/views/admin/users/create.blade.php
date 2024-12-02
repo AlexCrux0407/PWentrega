@@ -32,4 +32,24 @@
         <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: "{{ session('success') }}",
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
+
+@if(session('errors'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: "{{ session('errors') }}",
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
 @endsection

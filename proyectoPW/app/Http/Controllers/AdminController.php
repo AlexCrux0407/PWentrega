@@ -23,7 +23,11 @@ class AdminController extends Controller
     }
 
     // ---------------- USUARIOS ---------------- //
-
+    public function showCreateUserForm()
+    {
+        return view('admin.users.create'); // Asegúrate de que esta vista exista.
+    }
+    
     public function createUser(Request $request)
     {
         $request->validate([
