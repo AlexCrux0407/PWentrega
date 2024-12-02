@@ -10,7 +10,6 @@ use App\Models\Vuelo;
 use Carbon\Carbon;
 use App\Models\TermsAndConditions;
 
-
 class ReservationController extends Controller
 {
     public function store(Request $request)
@@ -55,62 +54,49 @@ class ReservationController extends Controller
         return redirect()->route('reservations.reservacion');
     }
 
-
     public function reservacion()
     {
-        // Obtener la reservación desde la sesión
         $reservation = session('reservations');
 
         if (!$reservation) {
             return redirect()->route('reservations.create')->withErrors('No hay reservaciones para mostrar.');
         }
 
-        // Calcular los días entre las fechas de check-in y check-out
-        $checkInDate = Carbon::parse($reservation['check_in_date']);
-        $checkOutDate = Carbon::parse($reservation['check_out_date']);
-        $days = $checkInDate->diffInDays($checkOutDate);
-
-        // Obtener los términos y condiciones desde la base de datos
-        $termsAndConditions = TermsAndConditions::first(); // Asumiendo que solo hay un registro
-
-        return view('reservations.reservacion', compact('reservation', 'days', 'terms_and_conditions'));
+        return view('reservations.reservacion');
     }
-
-
-
-
-
-    public function userReservations()
-    {
-        $userReservations = Auth::user()->reservations;
-        return view('reservations.user', compact('userReservations'));
-    }
-
-    public function create()
-    {
-        $hoteles = Hotel::all();
-        $vuelos = Vuelo::all();
-        return view('reservations.create', compact('hoteles', 'vuelos'));
-    }
-
 
     public function cancelReservation($id)
     {
         $reservation = Reservation::find($id);
-        $currentDate = Carbon::now();
-        $reservationDate = Carbon::parse($reservation->created_at);
 
-        // Verificar si está dentro de las 48 horas
-        if ($currentDate->diffInHours($reservationDate) <= 48) {
-            // Cancelación sin cargos adicionales
-            $reservation->delete();
-            return redirect()->route('reservations.user')->with('success', 'Reservación cancelada sin cargos adicionales.');
-        } else {
-            // Aplicar cargos por cancelación
-            $cancellationFee = $reservation->total * 0.5; // 50% de cargos por cancelación
-            $user = Auth::user();
-            $reservation->delete();
-            return redirect()->route('reservations.user')->with('success', 'Reservación cancelada con un cargo del 50%.');
+        if (!$reservation) {
+            return redirect()->route('reservations.user')->withErrors('Reservación no encontrada.');
         }
+
+        $reservation->delete();
+
+        return redirect()->route('reservations.user')->with('success', 'Reservación cancelada exitosamente.');
     }
+
+    public function userReservations()
+    {
+        // Implementar lógica para mostrar las reservaciones del usuario
+    }
+
+    public function create()
+    {
+        // Implementar lógica para mostrar el formulario de creación de reservaciones
+    }
+
+    public function showTermsAndConditions()
+    {
+        $termsAndConditions = TermsAndConditions::first();
+    
+        // Pasar los términos y condiciones a la vista
+        return view('termsAndConditions', compact('termsAndConditions'));
+    }
+    
+    
+
+
 }

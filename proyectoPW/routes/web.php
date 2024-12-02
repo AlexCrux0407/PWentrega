@@ -100,3 +100,6 @@ Route::get('/reportes/hoteles/excel', [ReportController::class, 'hotelesExcel'])
 Route::post('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('rutabuscarHotel');
 Route::get('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('buscarHotel');
 Route::get('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('hoteles.index');
+
+// Ruta para términos y condiciones
+Route::get('/terms-and-conditions', [ReservationController::class, 'showTermsAndConditions'])->name('termsAndConditions');
