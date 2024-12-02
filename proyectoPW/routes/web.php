@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\ControladorTurista;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\HotelesController;
-use App\Http\Controllers\VueloController;
+use App\Http\Controllers\VueloController;  
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReportController;
 
 // Rutas para el formulario de inicio de sesión
 Route::get('/login', [AuthController::class, 'login'])->name('login'); // Mostrar formulario de inicio de sesión
@@ -44,9 +46,7 @@ Route::get('/hoteles', function () {
     return view('hoteles');
 })->name('hoteles');
 
-Route::get('/reservacion', function () {
-    return view('reservacion');
-})->name('reservacion');
+
 
 Route::post('/reservar-servicio', [ControladorTurista::class, 'reservarServicio'])->name('reservarServicio');
 
@@ -74,6 +74,27 @@ Route::post('/admin/hoteles/create', [AdminController::class, 'createHotel'])->n
 Route::get('/admin/hoteles/{id}/edit', [AdminController::class, 'showEditHotelForm'])->name('admin.editHotel');
 Route::put('/admin/hoteles/{id}', [AdminController::class, 'updateHotel'])->name('admin.updateHotel');
 Route::delete('/admin/hoteles/{id}', [AdminController::class, 'deleteHotel'])->name('admin.deleteHotel');
+
+
+//rutas reservacion de servicios
+Route::view('/reservacion','reservations.reservacion')->name('reservacion');
+Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
+Route::post('/reservations/store', [ReservationController::class, 'store'])->name('reservations.store');
+Route::get('/reservations/reservacion', [ReservationController::class, 'reservacion'])->name('reservations.reservacion'); 
+Route::get('/reservations/user', [ReservationController::class, 'userReservations'])->name('reservations.user'); 
+Route::get('/reservations/cancel/{id}', [ReservationController::class, 'cancelReservation'])->name('reservations.cancel');
+
+// Rutas para ajustar tarifas
+Route::post('/admin/vuelos/ajustar-tarifas', [AdminController::class, 'ajustarTarifasVuelo'])->name('admin.ajustarTarifasVuelo');
+Route::post('/admin/hoteles/ajustar-tarifas', [AdminController::class, 'ajustarTarifasHotel'])->name('admin.ajustarTarifasHotel');
+
+// Reportes en PDF
+Route::get('/reportes/vuelos/pdf', [ReportController::class, 'vuelosPdf'])->name('reportes.vuelos.pdf');
+Route::get('/reportes/hoteles/pdf', [ReportController::class, 'hotelesPdf'])->name('reportes.hoteles.pdf');
+
+// Reportes en Excel
+Route::get('/reportes/vuelos/excel', [ReportController::class, 'vuelosExcel'])->name('reportes.vuelos.excel');
+Route::get('/reportes/hoteles/excel', [ReportController::class, 'hotelesExcel'])->name('reportes.hoteles.excel');
 Route::post('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('rutabuscarHotel');
 Route::get('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('buscarHotel');
 Route::get('/buscar-hotel', [HotelesController::class, 'buscarHotel'])->name('hoteles.index');

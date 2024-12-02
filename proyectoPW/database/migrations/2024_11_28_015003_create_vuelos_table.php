@@ -14,15 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('vuelos', function (Blueprint $table) {
-            $table->id(); // Campo ID autoincremental
-            $table->string('origen'); // Origen del vuelo
-            $table->string('destino'); // Destino del vuelo
-            $table->date('fecha_salida'); // Fecha de salida
-            $table->date('fecha_llegada'); // Fecha de llegada
-            $table->decimal('precio', 8, 2); // Precio del vuelo con dos decimales
-            $table->string('aerolinea'); // Aerolínea
-            $table->integer('escalas'); // Número de escalas
-            $table->timestamps(); // Campos created_at y updated_at
+            $table->id(); 
+            $table->string('origen'); 
+            $table->string('destino'); 
+            $table->date('fecha_salida'); 
+            $table->date('fecha_llegada'); 
+            $table->decimal('precio', 8, 2); 
+            $table->string('aerolinea'); 
+            $table->integer('escalas'); 
+            $table->timestamps(); 
             
         });
     }

@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('usuario')->unique(); // Agregar columna usuario
             $table->string('password');
+            $table->string('rol')->default('usuario'); // Agregar columna rol
             $table->rememberToken();
             $table->timestamps();
         });

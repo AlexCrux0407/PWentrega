@@ -88,14 +88,18 @@ class AdminController extends Controller
             'origen' => 'required|string|max:255',
             'destino' => 'required|string|max:255',
             'fecha_salida' => 'required|date',
+            'fecha_llegada' => 'required|date',
             'precio' => 'required|numeric',
+            'aerolinea' => 'required|string|max:255',
         ]);
 
         Vuelo::create([
             'origen' => $request->origen,
             'destino' => $request->destino,
             'fecha_salida' => $request->fecha_salida,
+            'fecha_llegada' => $request->fecha_llegada,
             'precio' => $request->precio,
+            'aerolinea' => $request->aerolinea,
         ]);
 
         return back()->with('success', 'Vuelo creado con éxito');
@@ -195,4 +199,54 @@ class AdminController extends Controller
 
         return back()->with('success', 'Hotel eliminado con éxito');
     }
+    // Mostrar formulario para crear un vuelo
+    public function showCreateVueloForm()
+    {
+        return view('admin.vuelos.create');
+    }
+
+    // Mostrar formulario para editar un vuelo
+    public function showEditVueloForm($id)
+    {
+        $vuelo = Vuelo::findOrFail($id);
+        return view('admin.vuelos.edit', compact('vuelo'));
+    }
+
+    // Mostrar formulario para crear un hotel
+    public function showCreateHotelForm()
+    {
+        return view('admin.hoteles.create');
+    }
+
+    // Mostrar formulario para editar un hotel
+    public function showEditHotelForm($id)
+    {
+        $hotel = Hotel::findOrFail($id);
+        return view('admin.hoteles.edit', compact('hotel'));
+    }
+    public function ajustarTarifasVuelo(Request $request)
+    {
+        $request->validate([
+            'incremento' => 'required|numeric',
+        ]);
+
+        Vuelo::query()->increment('precio', $request->incremento);
+
+        return back()->with('success', 'Se han ajustado las tarifas de los vuelos.');
+    }
+    public function ajustarTarifasHotel(Request $request)
+    {
+        $request->validate([
+            'incremento' => 'required|numeric',
+        ]);
+
+        Hotel::query()->increment('precio_por_noche', $request->incremento);
+
+        return back()->with('success', 'Se han ajustado las tarifas de los hoteles en $' . $request->incremento);
+    }
+    
+
+
+
 }
+
