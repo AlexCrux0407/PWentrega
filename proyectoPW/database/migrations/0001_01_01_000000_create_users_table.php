@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('usuario')->unique(); // Agregar columna usuario
             $table->string('password');
             $table->string('rol')->default('usuario'); // Agregar columna rol
+            $table->string('confimation_token',60)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

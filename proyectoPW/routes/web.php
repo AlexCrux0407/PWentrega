@@ -14,6 +14,8 @@ Route::post('/login', [AuthController::class, 'authenticate'])->name('procesarLo
 // Rutas para el formulario de registro
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'processRegister'])->name('processRegister');
+Route::get('/confirm-account/{token}', [App\Http\Controllers\Auth\ConfirmAccountController::class, 'confirm'])->name('confirmAccount');
+
 
 Route::get('/registro', [AuthController::class, 'register'])->name('registro'); // Mostrar formulario de registro
 
