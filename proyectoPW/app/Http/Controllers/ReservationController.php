@@ -8,6 +8,8 @@ use App\Models\Reservation;
 use App\Models\Hotel;
 use App\Models\Vuelo;
 use Carbon\Carbon;
+use App\Models\TermsAndConditions;
+
 
 class ReservationController extends Controller
 {
@@ -56,17 +58,26 @@ class ReservationController extends Controller
 
     public function reservacion()
     {
-        // Depurar contenido de la sesión
-        dd(session('reservations'));
-
+        // Obtener la reservación desde la sesión
         $reservation = session('reservations');
 
         if (!$reservation) {
             return redirect()->route('reservations.create')->withErrors('No hay reservaciones para mostrar.');
         }
 
-        return view('reservations.reservacion', compact('reservation'));
+        // Calcular los días entre las fechas de check-in y check-out
+        $checkInDate = Carbon::parse($reservation['check_in_date']);
+        $checkOutDate = Carbon::parse($reservation['check_out_date']);
+        $days = $checkInDate->diffInDays($checkOutDate);
+
+        // Obtener los términos y condiciones desde la base de datos
+        $termsAndConditions = TermsAndConditions::first(); // Asumiendo que solo hay un registro
+
+        return view('reservations.reservacion', compact('reservation', 'days', 'terms_and_conditions'));
     }
+
+
+
 
 
     public function userReservations()
@@ -77,11 +88,11 @@ class ReservationController extends Controller
 
     public function create()
     {
-        $hoteles = Hotel::all(); 
-        $vuelos = Vuelo::all();  
+        $hoteles = Hotel::all();
+        $vuelos = Vuelo::all();
         return view('reservations.create', compact('hoteles', 'vuelos'));
     }
-    
+
 
     public function cancelReservation($id)
     {

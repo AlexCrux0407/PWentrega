@@ -40,7 +40,10 @@
                                             onclick="location.href='{{ route('reservations.create') }}'">
                                             Crear Nueva Reservación
                                         </button>
-
+                                        <button class="btn" id="show-terms-button"
+                                            style="background-color: #007bff; color: #ffffff; border: none; border-radius: 8px; padding: 10px 20px; width: 100%; margin: 10px 0; font-size: 16px;">
+                                            Ver Términos y Condiciones
+                                        </button>
                                         <button id="cancel-reservation" class="btn"
                                             style="background-color: #d9534f; color: #ffffff; border: none; border-radius: 8px; padding: 10px 20px; width: 100%; margin: 10px 0; font-size: 16px;">
                                             Cancelar Reservación
@@ -49,11 +52,40 @@
                     @else
                         <p class="text-center">No hay reservaciones para mostrar.</p>
                     @endif
+                    <!-- Modal para los términos y condiciones -->
+                    <div class="modal fade" id="termsModal" tabindex="-1" role="dialog"
+                        aria-labelledby="termsModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        {{ $terms_and_conditions->titulo ?? 'Términos y Condiciones' }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    {!! $termsAndConditions->contenido ?? 'No hay términos y condiciones disponibles.' !!}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('show-terms-button')?.addEventListener('click', function () {
+        var myModal = new bootstrap.Modal(document.getElementById('termsModal'));
+        myModal.show();
+    });
+</script>
+
 
 <script>
     document.getElementById('cancel-reservation')?.addEventListener('click', function () {
